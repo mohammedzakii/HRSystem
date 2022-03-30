@@ -1,0 +1,53 @@
+﻿@using HRSystem.Models
+
+@model Department
+
+<div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title-wrap bar-success">
+                        <h4 class="card-title" id="horz-layout-basic">Department Form </h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="px-3">
+						<form class="form form-horizontal" method="post" asp-action="saveAdd" asp-controller="Department">
+							<div class="form-body">
+								<h4 class="form-section">
+									<i class="icon-user"></i>Add New Department</h4>
+                               
+                                    <div class="form-group row">
+                                        <label asp-for="Name"> Name</label>
+                                        <div class="col-md-9">
+                                            <input asp-for="Name" class="form-control" />
+
+                                            <span asp-validation-for="Name" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-actions">
+
+                                        <button type="submit" class="btn btn-success" value="Add">
+                                            <i class="icon-note"></i> ADD
+                                        </button>
+                                    </div>
+                                </div>
+
+
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</section>
+<!-- // Basic form layout section end -->
+            </div>
+          </div>
+        </div>
+	</div>
+
+ 

@@ -1,0 +1,40 @@
+﻿@using HRSystem.Models
+@model OfficialHolidays
+<form asp-action="SaveEdit" asp-controller="OfficialHolidays" asp-route-id="@Model.Id" method="post">
+    <div>
+        <label asp-for="Name"> </label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+
+    <div>
+
+        <label asp-for="Date"> </label>
+        <input asp-for="Date" class="form-control" />
+    </div>
+    <div class="form-actions">
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-success pr-3 pl-3" data-toggle="modal" data-target="#exampleModal">Edit</button>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" id="modalDialog" >
+            <div class="modal-content" id="modalContent">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Warning</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h5>Are you sure you need to update this data ? </h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <input type="submit" class="btn btn-success  " value="Update" />
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+</form>

@@ -1,0 +1,162 @@
+﻿@model List<Employee>
+
+<section id="configuration" class="container">
+
+    <div class="container">
+        <div class="card-header">
+            <div class="card-title-wrap bar-success">
+                <h4 class="card-title">Salary Report Information</h4>
+            </div>
+        </div>
+        <div class="card-body collapse show  m-auto">
+            <div class="card-block card-dashboard ">
+
+                <div class="row col-lg-12" style="position:relative">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="dataTables_length " id="DataTables_Table_0_length">
+
+                            <div class="card-body">
+                                <div class=" container m-auto ">
+
+                                    <form asp-action="" asp-controller="SalaryReport">
+                                        <div class="row">
+
+
+                                            <div class=" form-group p-3 col-lg-3 col-md-4 col-sm-12">
+                                                <label for="exampleInputEmail1">Emp Name</label>
+                                                <input required type="text" class="form-control col-lg-12" id="exampleInputEmail1" name="EmpName" value="@ViewBag.EmpName">
+                                                <small class="form-text text-muted">Employee Name</small>
+                                                <span class="text-danger">@ViewBag.EmpErrMSG</span>
+                                            </div>
+
+                                            <div class=" form-group p-3 col-lg-3 col-md-4 col-sm-12">
+                                                <label for="mnth">Month</label>
+                                                <input min="1" max="12" required type="number" class="form-control col-lg-12" id="mnth" name="mnth" value="@ViewBag.mnth">
+                                                <small class="form-text text-muted">Search with month</small>
+                                            </div>
+                                            <div class=" form-group p-3 col-lg-3 col-md-4 col-sm-12">
+                                                <label for="year">Year</label>
+                                                <input min="2008" required type="number" class="form-control col-lg-12" id="year" name="year" value="@ViewBag.year">
+                                                <small class="form-text text-muted">Search with year</small>
+                                            </div>
+
+                                            <div class="form-group p-3 col-lg-3 col-sm-12 ">
+                                                <button type="submit" style="margin-top:39px!important" class="btn btn-primary col-lg-12 mt-4">Search</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        @if (@ViewBag.year != 1 && ViewBag.EmpName != null)
+                        {
+
+                            <div class="scroll">
+
+
+                                <table class="table table-striped table-bordered zero-configuration">
+                                    <thead class="text-light bg-dark">
+                                        <tr class="text-center text-truncate">
+                                            <th>Name</th>
+                                            <th>Department</th>
+                                            <th>Salary</th>
+                                            <th>Attendance Days</th>
+                                            <th>Absence Days</th>
+                                            <th>bonus Hours</th>
+                                            <th>Discount Hours</th>
+                                            <th>Total Bonus</th>
+                                            <th>Total Discount</th>
+                                            <th>Total</th>
+                                            <th>Details</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var EMP in @Model)
+                                        {
+                                            <tr>
+
+                                                @{
+                                                    var AttendanceHours = @EMP.LeavingTime.Hour - @EMP.AttendanceTime.Hour;
+                                                    var AttendanceMinute = @EMP.LeavingTime.Minute - @EMP.AttendanceTime.Minute;
+                                                    var AttendanceDays = 0;
+                                                    var AbsenceDays = 0;
+                                                    var DiscountHours = 0;
+                                                    var bonusHours = 0;
+                                                    decimal TotalDiscount = 0;
+                                                    decimal Totalbonus = 0;
+                                                    decimal Total = 0;
+                                                    decimal Salary = 0;
+                                                    decimal daySalary = @EMP.Salary / @ViewBag.Days;
+                                                    decimal TotalAbsenceDiscount = 0;
+                                                }
+
+                                                @if (@EMP.attendanceReports != null)
+                                                {
+                                                    @foreach (var report in @EMP.attendanceReports)
+                                                    {
+                                                        @*<td>@report.EmpId</td>*@
+
+                                                        if (report.Date.Year == ViewBag.year && report.Date.Month == ViewBag.mnth)
+                                                        {
+
+                                                            if ((report.LeavingTime.Hour - report.AttendanceTime.Hour) == AttendanceHours)
+                                                            {
+                                                                AttendanceDays++;
+                                                            }
+                                                            else if ((report.LeavingTime.Hour - report.AttendanceTime.Hour) > AttendanceHours)
+                                                            {
+                                                                AttendanceDays++;
+                                                                bonusHours += (report.LeavingTime.Hour - report.AttendanceTime.Hour) - AttendanceHours;
+                                                                Totalbonus = bonusHours * (@ViewBag.setting.ExtraHours);
+                                                            }
+                                                            else if ((report.LeavingTime.Hour - report.AttendanceTime.Hour) < AttendanceHours)
+                                                            {
+                                                                AttendanceDays++;
+                                                                DiscountHours += AttendanceHours - (report.LeavingTime.Hour - report.AttendanceTime.Hour);
+                                                                TotalDiscount = DiscountHours * (@ViewBag.setting.DiscountHours);
+                                                            }
+                                                            AbsenceDays = @ViewBag.Days - AttendanceDays;
+
+                                                            TotalAbsenceDiscount = daySalary * AbsenceDays;
+                                                            TotalAbsenceDiscount = Math.Round(TotalAbsenceDiscount, 2);
+
+                                                            Total = @EMP.Salary + @Totalbonus - @TotalDiscount - @TotalAbsenceDiscount;
+                                                            Salary = @EMP.Salary;
+                                                        }
+                                                    }
+                                                    TotalDiscount += TotalAbsenceDiscount;
+                                                }
+
+                                                <td>@EMP.Name</td>
+                                                <td>@EMP.Department.Name</td>
+                                                <td>$@Salary </td>
+                                                <td>@AttendanceDays Day</td>
+                                                <td>@AbsenceDays Day</td>
+                                                <td>@bonusHours Hour</td>
+                                                <td>@DiscountHours Hour</td>
+                                                <td>$@Totalbonus</td>
+                                                <td>$@TotalDiscount</td>
+                                                <td>$@Total</td>
+                                                <td>
+                                                    <a class="btn btn-danger" asp-action="Details" asp-controller="SalaryReport"  asp-route-EmpName="@EMP.Name&DeptName" asp-route-DeptName="@EMP.Department.Name" asp-route-Salary="@Salary"  asp-route-AttendanceDays="@AttendanceDays" asp-route-AbsenceDays="@AbsenceDays" asp-route-bonusHours="@bonusHours" asp-route-DiscountHours="@DiscountHours"  asp-route-Totalbonus="@Totalbonus"   asp-route-TotalDiscount="@TotalDiscount"  asp-route-Total="@Total"   > Details </a>
+                                                </td>
+
+                                            </tr>
+
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+
+

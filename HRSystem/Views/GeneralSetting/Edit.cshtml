@@ -1,0 +1,84 @@
+﻿@model GeneralSetting
+
+<form asp-action="SaveEdit" asp-controller="GeneralSetting" asp-route-id="@Model.Id" method="post">
+    <div class="form-body">
+        <h4 class="form-section">
+            <i class="icon-user"></i>General information
+        </h4>
+        <div class="form-group row">
+            <label asp-for="ExtraHours" class="col-md-3 label-control" for="projectinput1">
+                Extra:
+            </label>
+            <div class="col-md-9">
+                <input asp-for="ExtraHours" type="number" id="projectinput1" class="form-control" />
+                <span asp-validation-for="ExtraHours" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="DiscountHours" class="col-md-3 label-control" for="projectinput2">
+                Discount:
+            </label>
+            <div class="col-md-9">
+                <input asp-for="DiscountHours" type="number" class="form-control" />
+                <span asp-validation-for="DiscountHours" class="text-danger"></span>
+            </div>
+        </div>
+
+
+        <div class="form-group row">
+            <label class="col-md-3 label-control" for="projectinput7">Weekly Holidays: </label>
+            <div class="col-md-9">
+                <div>
+                    <label asp-for="OffDAy1" class="label-control">DayOff1:</label>
+                    <select asp-for="OffDAy1" asp-items="Html.GetEnumSelectList<Days>()" class="form-control">
+                        <option value="" selected="selected">-- Select Day--</option>
+                    </select>
+                    <span asp-validation-for="OffDAy1" class="text-danger"></span>
+                </div>
+
+
+                <div>
+                    <label asp-for="OffDAy2" class="label-control">DayOff2:</label>
+                    <select asp-for="OffDAy2" asp-items="Html.GetEnumSelectList<Days>()" class="form-control">
+                        <option value="" selected="selected">-- Select Day--</option>
+                    </select>
+                    <span asp-validation-for="OffDAy2" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-success pr-3 pl-3" data-toggle="modal" data-target="#exampleModal">update</button>
+
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" id="modalDialog">
+            <div class="modal-content" id="modalContent">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Warning</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h5>Are you sure you need to update this data ? </h5>
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <input type="submit" class="btn btn-success" value="update" />
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+
+
+
+</form>
